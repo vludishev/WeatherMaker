@@ -1,0 +1,108 @@
+﻿<Window x:Class="WeatherMaker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WeatherMaker"
+        mc:Ignorable="d"
+        Height="500" Width="400"
+        Title="">
+    <Window.Resources>
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CustomTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontFamily" Value="Cascadia Code SemiLight" />
+        </Style>
+        <Style x:Key="DowTileStyle" TargetType="local:DowTile">
+            <Setter Property="Margin" Value="2 0"></Setter>
+        </Style>
+    </Window.Resources>
+    <Window.Style>
+        <Style TargetType="Window">
+            <Setter Property="WindowStyle" Value="None"/>
+            <Setter Property="AllowsTransparency" Value="True"/>
+            <Setter Property="Background" Value="#121538"/>
+        </Style>
+    </Window.Style>
+    
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Margin="15 0 0 0" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Image Source="\Resources\Images\Location.png" Height="20" Width="30"></Image>
+                    <TextBlock FontWeight="Bold" Text="{Binding CurrentCity}" FontSize="20" Style="{StaticResource CustomTextBlockStyle}"></TextBlock>
+                </StackPanel>
+
+                <TextBlock Grid.Row="1" HorizontalAlignment="Left" FontWeight="Bold" Text="{Binding CurrentTemperature}" Margin="0 20" FontSize="95" Style="{StaticResource CustomTextBlockStyle}"></TextBlock>
+                <TextBlock Grid.Row="2" FontSize="20" HorizontalAlignment="Left" Text="{Binding PrecipitationType}" Style="{StaticResource CustomTextBlockStyle}"></TextBlock>
+                <TextBlock Grid.Row="3" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" Text="{Binding Coordinates}" Style="{StaticResource CustomTextBlockStyle}"></TextBlock>
+            </Grid>
+
+            <Image x:Name="BasicWeatherPicture" HorizontalAlignment="Right" VerticalAlignment="Center" Width="140" Source="{Binding WeatherImage}" Grid.Column="1"></Image>
+        </Grid>
+        <Border Background="#30C0C0C0" Grid.Row="1" CornerRadius="10">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <Border Background="#35C0C0C0" Grid.Row="0" Margin="5 5" CornerRadius="10">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Button x:Name="DailyModeBtn" Background="White" Grid.Column="0" Command="{Binding DailyModeCommand}" Style="{StaticResource CustomButtonStyle}" Click="DailyModeBtn_Click">
+                            <TextBlock x:Name="DailyModeBtnText" Text="Daily" FontWeight="Bold" FontSize="15" Foreground="#251A54" Style="{StaticResource CustomTextBlockStyle}" />
+                        </Button>
+                        <Button x:Name="HourlyModeBtn" Background="#251A54" Grid.Column="1" Command="{Binding HourlyModeCommand}" Style="{StaticResource CustomButtonStyle}" Click="HourlyModeBtn_Click">
+                            <TextBlock x:Name="HourlyModeBtnText" Text="Hourly" FontWeight="Bold" FontSize="15" Foreground="White" Style="{StaticResource CustomTextBlockStyle}"/>
+                        </Button>
+                    </Grid>
+                </Border>
+                <ListBox x:Name="DowTilesContainer" ItemsSource="{Binding DowTiles}" VerticalContentAlignment="Stretch" Margin="5" Background="Transparent" BorderThickness="0"
+                         HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" 
+                         Grid.Row="1">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

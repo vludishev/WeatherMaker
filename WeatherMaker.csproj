@@ -1,0 +1,488 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\0185e5c-weather_icon_small_ic_rain_drizzle_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\06ddaa4-weather_icon_small_ic_rain_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\0c6cae4-weather_icon_small_ic_freezing_rain_drizzle_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\0eb328b-weather_icon_small_ic_flurries_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\1056ca5-weather_icon_small_ic_freezing_rain_light_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\115b3d3-weather_icon_small_ic_rain_drizzle_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\1174193-weather_icon_small_ic_flurries3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\1553f7d-weather_icon_small_ic_snow_light_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\1b54474-weather_icon_small_ic_rain_light_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\1e601d0-weather_icon_small_ic_rain_heavy_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\1e6d03c-weather_icon_small_ic_ice_pellets_heavy_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\20c73b9-weather_icon_small_ic_snow_heavy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\2560248-weather_icon_small_ic_tstorm_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\273a864-weather_icon_small_ic_snow_heavy_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\28c3d6e-weather_icon_small_ic_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\2a51b2a-weather_icon_small_ic_freezing_rain_light_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\2b4fae2-weather_icon_small_ic_rain_light_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\2edb7b9-weather_icon_small_ic_fog_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\2f614b7-weather_icon_small_ic_freezing_rain_heavy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\314349c-weather_icon_small_ic_ice_pellets3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\321062d-weather_icon_small_ic_freezing_rain3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\33804f6-weather_icon_small_ic_rain_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\36e7eea-weather_icon_small_ic_tstorm_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\39fb806-weather_icon_small_ic_tstorm3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\3b242a7-weather_icon_small_ic_ice_pellets_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\3c0777c-weather_icon_small_ic_rain_drizzle_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\3cfd356-weather_icon_small_ic_freezing_rain_heavy_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\3e4bb7c-weather_icon_small_ic_freezing_rain_drizzle_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\4042728-weather_icon_small_ic_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\40e951d-weather_icon_small_ic_tstorm_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\43b5585-weather_icon_small_ic_freezing_rain_drizzle3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\4625890-weather_icon_small_ic_rain_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\4775127-weather_icon_small_ic_snow_heavy_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\4920058-weather_icon_small_ic_fog_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\4bb600a-weather_icon_small_ic_freezing_rain_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\4e17cc7-weather_icon_small_ic_ice_pellets_light_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\531761a-weather_icon_small_ic_snow_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\53a98e3-weather_icon_small_ic_snow_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\53f8337-weather_icon_small_ic_rain_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\57837dc-weather_icon_small_ic_snow_heavy_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\57ffece-weather_icon_small_ic_ice_pellets_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\59286d3-weather_icon_small_ic_ice_pellets_heavy_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\5998237-weather_icon_small_ic_rain_light_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\5a421d5-weather_icon_small_ic_freezing_rain_heavy_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\5af7732-weather_icon_small_ic_freezing_rain_heavy_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\5b51f31-weather_icon_small_ic_rain_heavy_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\5bca07a-weather_icon_small_ic_tstorm_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\5e26dba-weather_icon_small_ic_flurries_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\5ef9011-weather_icon_small_ic_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\60374f7-weather_icon_small_ic_snow_light_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\60ac876-weather_icon_small_ic_fog_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\64742a8-weather_icon_small_ic_rain_drizzle_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\67e670f-weather_icon_small_ic_snow_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\683f4ef-weather_icon_small_ic_ice_pellets_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\6af2ec5-weather_icon_small_ic_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\6b52557-weather_icon_small_ic_snow_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\6beaa54-weather_icon_small_ic_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\6ef3d95-weather_icon_small_ic_snow_light_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\6fa0235-weather_icon_small_ic_snow_heavy_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\7089996-weather_icon_small_ic_ice_pellets_light_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\731a898-weather_icon_small_ic_snow3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\75ac99c-weather_icon_small_ic_flurries_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\76580b9-weather_icon_small_ic_fog_light3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\7922093-weather_icon_small_ic_fog_light_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\7c23873-weather_icon_small_ic_wintry_mix3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\7c81251-weather_icon_small_ic_snow_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\7ec9c2e-weather_icon_small_ic_freezing_rain_drizzle_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\7fa23d2-weather_icon_small_ic_fog_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\80a0b5b-weather_icon_small_ic_ice_pellets_light_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\80a2922-weather_icon_small_ic_tstorm_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\8174fd6-weather_icon_small_ic_freezing_rain_heavy_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\8becb15-weather_icon_small_ic_rain_drizzle_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\8cde587-weather_icon_small_ic_ice_pellets_light3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\8d0be01-weather_icon_small_ic_snow_light_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\8d37852-weather_icon_small_ic_fog3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\8db0a11-weather_icon_small_ic_ice_pellets_heavy_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\8dde60b-weather_icon_small_ic_ice_pellets_heavy_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\919caa0-weather_icon_small_ic_tstorm_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\93499d2-weather_icon_small_ic_freezing_rain_light_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\93862f9-weather_icon_small_ic_ice_pellets_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\98dd8de-weather_icon_small_ic_freezing_rain_light_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\9b097e6-weather_icon_small_ic_freezing_rain_light_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\9d1a4dc-weather_icon_small_ic_freezing_rain_light3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\9e23bdd-weather_icon_small_ic_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\a31c783-weather_icon_small_ic_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\a95f353-weather_icon_small_ic_rain_heavy_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\aab8713-weather_icon_small_ic_rain3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\abc33f3-weather_icon_small_ic_snow_heavy_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\aeb6765-weather_icon_small_ic_freezing_rain_drizzle_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\b318a6a-weather_icon_small_ic_ice_pellets_heavy_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\b40dc36-weather_icon_small_ic_fog_light_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\b44bc85-weather_icon_small_ic_rain_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\b663ac1-weather_icon_small_ic_rain_drizzle_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\b76e340-weather_icon_small_ic_snow_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\b974403-weather_icon_small_ic_snow_heavy_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\bb026c4-weather_icon_small_ic_ice_pellets_light_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\bb48957-weather_icon_small_ic_freezing_rain_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\c08a232-weather_icon_small_ic_freezing_rain_drizzle_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\c136fe4-weather_icon_small_ic_flurries_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\c20b471-weather_icon_small_ic_ice_pellets_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\c24bc3a-weather_icon_small_ic_fog_light_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\c3397dd-weather_icon_small_ic_rain_heavy_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\c3d2596-weather_icon_small_ic_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\c408d13-weather_icon_small_ic_ice_pellets_light_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\c736bc9-weather_icon_small_ic_snow_light3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\c788c63-weather_icon_small_ic_freezing_rain_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\c8a5f68-weather_icon_small_ic_freezing_rain_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\cc2d732-weather_icon_small_ic_fog_light_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\cdb4412-weather_icon_small_ic_freezing_rain_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\cef7801-weather_icon_small_ic_fog_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\ClearSky.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\d5707d4-weather_icon_small_ic_ice_pellets_heavy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\d6b65e2-weather_icon_small_ic_rain_light_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\d88cfce-weather_icon_small_ic_snow_light_mostly_clear3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\da617c6-weather_icon_small_ic_rain_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\da6a2c0-weather_icon_small_ic_flurries_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\dc28633-weather_icon_small_ic_fog_light_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\dc29162-weather_icon_small_ic_freezing_rain_heavy_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\dc848ac-weather_icon_small_ic_freezing_rain_drizzle_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\DrizzleLight.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\e07077f-weather_icon_small_ic_flurries_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\e0fc98f-weather_icon_small_ic_ice_pellets_light_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\e12875e-weather_icon_small_ic_freezing_rain_light_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\e7fdaa7-weather_icon_small_ic_fog_light_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\e844fd0-weather_icon_small_ic_ice_pellets_heavy_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\ea3dbdb-weather_icon_small_ic_ice_pellets_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\ea98852-weather_icon_small_ic_rain_light3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\ed6d922-weather_icon_small_ic_rain_light_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\f1c7a43-weather_icon_small_ic_freezing_rain_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\f22e925-weather_icon_small_ic_rain_drizzle3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\f8ed753-weather_icon_small_ic_snow_light_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\f9e9159-weather_icon_small_ic_rain_heavy_mostly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\fbbb8b2-weather_icon_small_ic_fog_partly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\fbec5fa-weather_icon_small_ic_freezing_rain_heavy_mostly_clear_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\fcae973-weather_icon_small_ic_rain_light_partly_cloudy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\fd94f24-weather_icon_small_ic_rain_heavy_mostly_cloudy_night3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\fdacbb8-weather_icon_small_ic_rain_heavy3x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\Fog.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\FreezingDrizzle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\FreezingRainHeavy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\FreezingRainLight.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\Location.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\MainlyClear.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\Overcast.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\PartlyCloudy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\RainHeavy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\RainModerate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\RainSlight.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\images\rainSun.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\RimeFog.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\SnowHeavy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\SnowModerate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\SnowSlight.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Images\Thunderstorm.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
