@@ -141,6 +141,9 @@
   <data name="DrizzleModerate" xml:space="preserve">
     <value>Умеренная морось</value>
   </data>
+  <data name="en" xml:space="preserve">
+    <value>Английский</value>
+  </data>
   <data name="Fahrenheit" xml:space="preserve">
     <value>Фаренгейт</value>
   </data>
@@ -206,6 +209,9 @@
   </data>
   <data name="RimeFog" xml:space="preserve">
     <value>Ледяной туман</value>
+  </data>
+  <data name="ru-RU" xml:space="preserve">
+    <value>Русский</value>
   </data>
   <data name="SettingsTB" xml:space="preserve">
     <value>Настройки</value>

@@ -133,6 +133,15 @@ namespace WeatherMaker.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        internal static string en {
+            get {
+                return ResourceManager.GetString("en", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fahrenheit.
         /// </summary>
         internal static string Fahrenheit {
@@ -327,6 +336,15 @@ namespace WeatherMaker.Resources {
         internal static string RimeFog {
             get {
                 return ResourceManager.GetString("RimeFog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Russian.
+        /// </summary>
+        internal static string ru_RU {
+            get {
+                return ResourceManager.GetString("ru-RU", resourceCulture);
             }
         }
         

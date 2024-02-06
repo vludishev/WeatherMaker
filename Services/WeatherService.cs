@@ -8,6 +8,7 @@ using XPlat.Device.Geolocation;
 using static System.Net.WebRequestMethods;
 using System.Xml;
 using System.Xml.Linq;
+using System.Globalization;
 
 namespace WeatherMaker.Services
 {
@@ -38,16 +39,7 @@ namespace WeatherMaker.Services
 
         public async Task<T?> GetAllCityNames<T>()
         {
-            string? apiUrl;
-            if (AppSettings.Language == "English")
-            {
-                apiUrl = "http://api.geonames.org/searchJSON?lang=en&featureClass=P&maxRows=1000&username=414105hc";
-            } else
-            {
-                apiUrl = "http://api.geonames.org/searchJSON?lang=ru&featureClass=P&maxRows=1000&username=414105hc";
-            }
-            
-
+            var apiUrl = $"http://api.geonames.org/searchJSON?lang={CultureInfo.CurrentCulture.TwoLetterISOLanguageName}&featureClass=P&maxRows=1000&username=414105hc";
             return await GetAsync<T>(apiUrl).ConfigureAwait(false);
         }
 
@@ -66,8 +58,6 @@ namespace WeatherMaker.Services
             if (alternateNames.Any())
                 return alternateNames.First();
 
-            // Если нет альтернативного имени для указанного языка,
-            // возвращаем оригинальное имя города.
             return doc.Element("geoname")?.Element("name")?.Value ?? "Unknown";
         }
 
@@ -86,15 +76,6 @@ namespace WeatherMaker.Services
             var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             var responseObject = await response.Content.ReadAsStringAsync();
-            return responseObject;
-        }
-
-        private static async Task<JObject> GetAsync(string url)
-        {
-            using HttpClient client = new();
-            var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseObject = JObject.Parse(await response.Content.ReadAsStringAsync());
             return responseObject;
         }
     }

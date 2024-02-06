@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,9 +16,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WeatherMaker.Models;
+using WeatherMaker.Models.Responses;
 using WeatherMaker.ViewModels;
+using WPFLocalizeExtension.Engine;
 
 namespace WeatherMaker
 {
@@ -25,24 +28,28 @@ namespace WeatherMaker
     /// </summary>
     public partial class SettingsPage : Page
     {
+
         public SettingsPage()
         {
             InitializeComponent();
 
             DataContext = new SettingsVM();
+
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+
+            ReturnImg.Source = new BitmapImage(new Uri(Path.Combine(basePath, @"resources\images\Return.png")));
+            LanguageCB.FontSize = 15;
+            TemperatureUnitCB.FontSize = 15;
+            GeopositionCB.FontSize = 15;
+
+            LanguageCB.FontFamily = new FontFamily("Cascadia Code SemiLight");
+            TemperatureUnitCB.FontFamily = new FontFamily("Cascadia Code SemiLight");
+            GeopositionCB.FontFamily = new FontFamily("Cascadia Code SemiLight");
         }
 
         private void ReturnButton_Click(object sender, RoutedEventArgs e)
         {
-
-            if (sender is Image image)
-            {
-
-                //mainPage.Source = new BitmapImage(new Uri("C:\\Users\\41n\\source\\repos\\WeatherMaker\\Resources\\Images\\settings.png", UriKind.RelativeOrAbsolute));
-            }
-
             NavigationService.Navigate(new MainPage());
-            //MainFrame.Content = new MainPage();
         }
 
         private void GeopositionCB_SelectionChanged(object sender, RoutedEventArgs e)
@@ -50,16 +57,18 @@ namespace WeatherMaker
             // Ваш код обработки события
             if (sender is ComboBox comboBox)
             {
+                if (!comboBox.IsLoaded)
+                    return;
+
                 var selectedItem = comboBox.SelectedItem;
                 if (selectedItem == null) {
                     return;
                 }
 
                 if (selectedItem is GeoInfo geoItem) {
-                    AppSettings.SelectedCity = geoItem.Name;
                     AppSettings.GeonameId = geoItem.GeonameId.ToString();
-                    AppSettings.Latitude = geoItem.Lat;
-                    AppSettings.Longitude = geoItem.Lng;
+                    AppSettings.Latitude = geoItem.Latitude;
+                    AppSettings.Longitude = geoItem.Longitude;
                 }
                 
                 // Дополнительные действия с выбранным элементом
@@ -71,6 +80,9 @@ namespace WeatherMaker
             // Ваш код обработки события
             if (sender is ComboBox comboBox)
             {
+                if (!comboBox.IsLoaded)
+                    return;
+
                 var selectedItem = comboBox.SelectedItem;
                 if (selectedItem == null)
                 {
@@ -86,17 +98,32 @@ namespace WeatherMaker
 
         private void LanguageCB_SelectionChanged(object sender, RoutedEventArgs e)
         {
+
             // Ваш код обработки события
             if (sender is ComboBox comboBox)
             {
+                if (!comboBox.IsLoaded)
+                    return;
+
                 var selectedItem = comboBox.SelectedItem;
                 if (selectedItem == null)
                 {
                     return;
                 }
 
-                AppSettings.Language = (string)selectedItem;
-                // Дополнительные действия с выбранным элементом
+                if (selectedItem is LanguageModel languageItem)
+                {
+                    AppSettings.Language = languageItem.Value;
+
+                    CultureInfo cultureInfo = new(languageItem.Value);
+
+                    Thread.CurrentThread.CurrentCulture = cultureInfo;
+                    Thread.CurrentThread.CurrentUICulture = cultureInfo;
+                    LocalizeDictionary.Instance.Culture = cultureInfo;
+
+                    //TODO: ПЕРЕРИСОВАТЬ контент контролов или обновить модель 
+                    NavigationService.Navigate(new MainPage());
+                }
             }
         }
 
@@ -104,6 +131,9 @@ namespace WeatherMaker
         {
             if (sender is CheckBox checkBox)
             {
+                if (!checkBox.IsLoaded)
+                    return;
+
                 AppSettings.Autorun = checkBox.IsChecked.GetValueOrDefault().ToString();
 
                 if (checkBox.IsChecked == true)

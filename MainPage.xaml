@@ -32,6 +32,10 @@
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontFamily" Value="Cascadia Code SemiLight" />
         </Style>
+        <Style x:Key="CustomImageStyle" TargetType="Image">
+            <Setter Property="Margin" Value="5 0" />
+            <Setter Property="Width" Value="30" />
+        </Style>
         <Style x:Key="DowTileStyle" TargetType="local:DowTile">
             <Setter Property="Margin" Value="2 0"></Setter>
         </Style>
@@ -43,17 +47,17 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Grid Margin="0 0 0 30" Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="10*" />
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <Image x:Name="OptionsImg" Source="C:\Users\41n\source\repos\WeatherMaker\Resources\Images\settings.png" Grid.Column="0" MouseLeftButtonDown="OptionsButton_Click"></Image>
-            <Image Source="C:\Users\41n\source\repos\WeatherMaker\Resources\Images\web-page.png" Grid.Column="2" MouseLeftButtonDown="MinimizeButton_Click"></Image>
-            <Image Source="C:\Users\41n\source\repos\WeatherMaker\Resources\Images\close-window.png" Grid.Column="3" MouseLeftButtonDown="CloseButton_Click"></Image>
+            <Image x:Name="OptionsImg" Grid.Column="0" MouseLeftButtonDown="OptionsButton_Click" Style="{StaticResource CustomImageStyle}" />
+            <Image x:Name="MinimizeWindowImg" Grid.Column="2" MouseLeftButtonDown="MinimizeButton_Click" Style="{StaticResource CustomImageStyle}" /> 
+            <Image x:Name="CloseWindowImg" Grid.Column="3" MouseLeftButtonDown="CloseButton_Click" Style="{StaticResource CustomImageStyle}" />
         </Grid>
 
         <Grid Grid.Row="1" VerticalAlignment="Top">
@@ -71,7 +75,7 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Image Source="C:\Users\41n\source\repos\WeatherMaker\Resources\Images\Location.png" Height="20" Width="30"></Image>
+                    <Image x:Name="GeoImg" Height="20" Width="30"></Image>
                     <TextBlock FontWeight="Bold" Text="{Binding CurrentCity}" FontSize="20" Style="{StaticResource CustomTextBlockStyle}"></TextBlock>
                 </StackPanel>
 
@@ -80,7 +84,7 @@
                 <TextBlock Grid.Row="3" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" Text="{Binding Coordinates}" Style="{StaticResource CustomTextBlockStyle}"></TextBlock>
             </Grid>
 
-            <Image x:Name="BasicWeatherPicture" HorizontalAlignment="Right" VerticalAlignment="Center" Width="140" Source="{Binding WeatherImage}" Grid.Column="1"></Image>
+            <Image x:Name="BasicWeatherPicture" HorizontalAlignment="Right" VerticalAlignment="Center" Width="180" Source="{Binding WeatherImage}" Grid.Column="1"></Image>
         </Grid>
         <Border Background="#30C0C0C0" Grid.Row="2" CornerRadius="10">
             <Grid >

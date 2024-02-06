@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WeatherMaker.Models;
 using WeatherMaker.Models.Responses;
 using WeatherMaker.Services;
-using WPFLocalizeExtension.Engine;
 
 namespace WeatherMaker.ViewModels
 {
@@ -17,47 +12,55 @@ namespace WeatherMaker.ViewModels
         public List<GeoInfo> Cities { get; set; }
         public GeoInfo SelectedCity { get; set; }
 
-        public List<TemperatureUnitInfo> TemperatureUnits { get; set; } = new List<TemperatureUnitInfo>() 
-        {
-            new ()
+        public List<TemperatureUnitInfo> TemperatureUnits { get; set; } =
+        [
+            new()
             {
                 Value = TemperatureUnit.Celsius,
                 LocalizedValue = LocalizedLogic.Instance[TemperatureUnit.Celsius.ToString()]
             },
-            new ()
+            new()
             {
                 Value = TemperatureUnit.Kelvin,
                 LocalizedValue = LocalizedLogic.Instance[TemperatureUnit.Kelvin.ToString()]
             },
-            new ()
+            new()
             {
                 Value = TemperatureUnit.Fahrenheit,
                 LocalizedValue = LocalizedLogic.Instance[TemperatureUnit.Fahrenheit.ToString()]
             },
-        };
+        ];
 
         public TemperatureUnitInfo SelectedTempUnit { get; set; }
 
-        public List<string> Languages { get; set; } = new List<string>() { "Русский", "English"};
+        public List<LanguageModel> Languages { get; set; } =
+        [
+            new() { Value = Language.Russian, LocalizedValue = LocalizedLogic.Instance[Language.Russian] },
+            new() { Value = Language.English, LocalizedValue = LocalizedLogic.Instance[Language.English] }
+        ];   
 
-        public string SelectedLanguage { get; set; }
+        public LanguageModel SelectedLanguage { get; set; }
+        public string Test { get; set; }
 
-        private IWeatherService _weatherService { get; set; }
+        private IWeatherService WeatherService { get; set; }
 
         public SettingsVM()
         {
-            _weatherService = new WeatherService();
+            WeatherService = new WeatherService();
 
             //LocalizedLogic.Instance["Celsius"], LocalizedLogic.Instance["Kelvin"], LocalizedLogic.Instance["Fahrenheit"]
             Autorun = bool.Parse(AppSettings.Autorun ?? "false");
-            Cities = _weatherService.GetAllCityNames<GeolocationModel>().Result.Geonames;
-            CultureInfo currentCulture = CultureInfo.CurrentCulture;
-            SelectedCity = new GeoInfo() { Name = AppSettings.SelectedCity, LocalizedValue = _weatherService.GetCityName(AppSettings.GeonameId, currentCulture.TwoLetterISOLanguageName).Result };
+            Cities = WeatherService.GetAllCityNames<GeolocationResponse>().Result.Geonames;
+            SelectedCity = new GeoInfo() {
+                Name = WeatherService.GetCityName(AppSettings.GeonameId, CultureInfo.CurrentCulture.TwoLetterISOLanguageName).Result,
+                Latitude = AppSettings.Latitude,
+                Longitude = AppSettings.Longitude,
+            };
+
             var tempEnum = Enum.Parse<TemperatureUnit>(AppSettings.TemperatureUnit);
             SelectedTempUnit = new TemperatureUnitInfo() { Value = tempEnum, LocalizedValue = LocalizedLogic.Instance[tempEnum.ToString()] };
-            SelectedLanguage = AppSettings.Language;
+            SelectedLanguage = new LanguageModel() { Value = AppSettings.Language, LocalizedValue = LocalizedLogic.Instance[AppSettings.Language] };
+            Test = "HEY";
         }
-
-
     }
 }

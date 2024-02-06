@@ -31,12 +31,6 @@ namespace WeatherMaker
             ConfigurationManager.RefreshSection("appSettings");
         }
 
-        public static string SelectedCity
-        {
-            get { return GetValue("SelectedCity"); }
-            set { SetValue("SelectedCity", value); }
-        }
-
         public static string GeonameId
         {
             get { return GetValue("GeonameId"); }

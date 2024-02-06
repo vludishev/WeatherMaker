@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -18,6 +19,13 @@ namespace WeatherMaker
             InitializeComponent();
 
             DataContext = new MainVM();
+
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+
+            OptionsImg.Source = new BitmapImage(new Uri(Path.Combine(basePath, @"resources\images\Settings.png")));
+            GeoImg.Source = new BitmapImage(new Uri(Path.Combine(basePath, @"resources\images\Location.png")));
+            MinimizeWindowImg.Source = new BitmapImage(new Uri(Path.Combine(basePath, @"resources\images\MinimizeWindow.png")));
+            CloseWindowImg.Source = new BitmapImage(new Uri(Path.Combine(basePath, @"resources\images\CloseWIndow.png")));
         }
 
         private void HourlyModeBtn_Click(object sender, RoutedEventArgs e)
@@ -25,7 +33,7 @@ namespace WeatherMaker
             if (sender is Button button)
             {
                 button.Background = Brushes.White;
-                HourlyModeBtn.Foreground = myBlue;
+                HourlyModeTB.Foreground = myBlue;
 
                 DailyModeBtn.Background = myBlue;
                 DailyModeTB.Foreground = Brushes.White;
@@ -40,7 +48,7 @@ namespace WeatherMaker
                 DailyModeTB.Foreground = myBlue;
 
                 HourlyModeBtn.Background = myBlue;
-                HourlyModeBtn.Foreground = Brushes.White;
+                HourlyModeTB.Foreground = Brushes.White;
             }
         }
 
@@ -59,13 +67,8 @@ namespace WeatherMaker
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
             var optionsPage = new SettingsPage();
-            if (sender is Image image)
-            {
-                image.Source = new BitmapImage(new Uri("C:\\Users\\41n\\source\\repos\\WeatherMaker\\Resources\\Images\\return.png", UriKind.RelativeOrAbsolute));
-            }
-
             NavigationService.Navigate(optionsPage);
-            //MainFrame.Content = new MainPage();
         }
     }
 }
+ 

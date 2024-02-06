@@ -11,7 +11,7 @@ namespace WeatherMaker.ViewModels
 {
     public class MainVM : INotifyPropertyChanged
     {
-        public ObservableCollection<DowTile> DowTiles { get; } = new ObservableCollection<DowTile>();
+        public ObservableCollection<DowTile> DowTiles { get; } = [];
 
         public ImageSource WeatherImage { get; set; }
         public string CurrentTemperature { get; set; }
