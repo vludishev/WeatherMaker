@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 using WeatherMaker.Models;
+using WeatherMaker.Models.Responses;
 using WeatherMaker.Services;
 
 namespace WeatherMaker.ViewModels
@@ -13,11 +14,12 @@ namespace WeatherMaker.ViewModels
         public ObservableCollection<DowTile> DowTiles { get; } = new ObservableCollection<DowTile>();
 
         public ImageSource WeatherImage { get; set; }
-        public double CurrentTemperature { get; set; }
+        public string CurrentTemperature { get; set; }
         public string CurrentCity { get; set; }
         public string PrecipitationType { get; set; }
         public string Coordinates { get; set; }
 
+        private TemperatureUnit _temperatureUnit {  get; set; }
         private IWeatherService _weatherService { get; set; }
 
         private RelayCommand dailyModeCommand;
@@ -60,15 +62,19 @@ namespace WeatherMaker.ViewModels
 
         private void SetHourlyData()
         {
-            var weatherData = _weatherService.GetWeatherData<HourlyWeatherResponse>().Result;
+            var weatherData = _weatherService.GetWeatherData<HourlyWeatherResponse>
+                (
+                    AppSettings.Latitude,
+                    AppSettings.Longitude
+                ).Result;
             if (weatherData == null)
             {
                 return;
             }
 
-            for (int i = 1; i < weatherData.Hourly.Time.Count; i++)
+            for (int i = 1; i < weatherData.Hourly.Temperature.Count; i++)
             {
-                var img = WeatherCodeDescriptions.GetDescription((WeatherCode)weatherData.Hourly.Weather_code[i]).WeatherImg;
+                var img = WeatherCodeDescriptions.GetDescription((WeatherCode)weatherData.Hourly.WeatherCode[i]).WeatherImg;
 
                 DowTile dowTile = new()
                 {
@@ -76,8 +82,9 @@ namespace WeatherMaker.ViewModels
                     Width = 70,
                     ViewModel = new()
                     {
-                        DayOfWeek = DateTime.Parse(weatherData.Hourly.Time[i]).ToString("h tt", CultureInfo.InvariantCulture),
-                        DegreesNumber = $"{(int)weatherData.Hourly.Temperature_2m[i]}°C",
+                        DayOfWeek = AppSettings.Language == "English" ? DateTime.Parse(weatherData.Hourly.Date[i]).ToString("h tt", CultureInfo.InvariantCulture)
+                            : DateTime.Parse(weatherData.Hourly.Date[i]).ToString("HH:mm"),
+                        DegreesNumber = $"{Convert.ToInt32(Helper.CalculateTemperature(weatherData.Hourly.Temperature[i], _temperatureUnit))}°",
                         WeatherPicture = img
                     }
                 };
@@ -87,15 +94,15 @@ namespace WeatherMaker.ViewModels
 
         private void SetDailyData()
         {
-            var weatherData = _weatherService.GetWeatherData<WeatherDataDailyModel>().Result;
-            if (weatherData == null)
-            {
-                return;
-            }
+            var weatherData = _weatherService.GetWeatherData<DailyWeatherResponse>
+                 (
+                     AppSettings.Latitude,
+                     AppSettings.Longitude
+                 ).Result;
 
-            for (int i = 1; i < weatherData.Daily.Temperature_2m_max.Count; i++)
+            for (int i = 1; i < weatherData.Daily.AverageTemperatures.Count; i++)
             {
-                var img = WeatherCodeDescriptions.GetDescription((WeatherCode)weatherData.Daily.Weather_code[i]).WeatherImg;
+                var img = WeatherCodeDescriptions.GetDescription((WeatherCode)weatherData.Daily.WeatherCode[i]).WeatherImg;
 
                 DowTile dowTile = new()
                 {
@@ -103,8 +110,8 @@ namespace WeatherMaker.ViewModels
                     Width = 70,
                     ViewModel = new()
                     {
-                        DayOfWeek = DateTime.Parse(weatherData.Daily.Time[i]).ToString("ddd"),
-                        DegreesNumber = $"{(int)weatherData.Daily.Temperature_2m_max[i]}°",
+                        DayOfWeek = DateTime.Parse(weatherData.Daily.Date[i]).ToString("ddd", CultureInfo.CurrentCulture),
+                        DegreesNumber = $"{Convert.ToInt32(Helper.CalculateTemperature(weatherData.Daily.AverageTemperatures[i], _temperatureUnit))}°",
                         WeatherPicture = img
                     }
                 };
@@ -114,19 +121,32 @@ namespace WeatherMaker.ViewModels
 
         private void GetCurrentWeatherData()
         {
-            var weatherData = _weatherService.GetWeatherData<CurrentWeatherDataModel>().Result;
-            if (weatherData == null)
+            var latitude = AppSettings.Latitude;
+            var longitude = AppSettings.Longitude;
+            if (Enum.TryParse(AppSettings.TemperatureUnit, out TemperatureUnit temperatureUnit))
             {
-                return;
+                _temperatureUnit = temperatureUnit;
             }
+            else
+            {
+                _temperatureUnit = TemperatureUnit.Celsius;
+            }
+            
+
+            var weatherData = _weatherService.GetWeatherData<CurrentWeatherResponse>
+                  (
+                      latitude,
+                      longitude
+                  ).Result;
 
             var weatherDescription = WeatherCodeDescriptions.GetDescription((WeatherCode)weatherData.Current.WeatherCode);
 
-            CurrentTemperature = weatherData.Current.Temperature_2m;
+            CurrentTemperature = $"{Convert.ToInt32(Helper.CalculateTemperature(weatherData.Current.Temperature, _temperatureUnit))}°";
             WeatherImage = weatherDescription.WeatherImg;
             PrecipitationType = weatherDescription.Description;
-            CurrentCity = _weatherService.GetCurrentCity(weatherData.Latitude, weatherData.Longitude).Result;
-            Coordinates = $"H:{(int)weatherData.Latitude}° L:{(int)weatherData.Longitude}°";
+            CurrentCity = _weatherService.GetCityName(AppSettings.GeonameId, CultureInfo.CurrentCulture.TwoLetterISOLanguageName).Result;
+            Coordinates = $"{LocalizedLogic.Instance["LatitudeTB"]}:{Convert.ToInt32(double.Parse(latitude, CultureInfo.GetCultureInfo("en")))}° " +
+                $"{LocalizedLogic.Instance["LongitudeTB"]}:{Convert.ToInt32(double.Parse(longitude, CultureInfo.GetCultureInfo("en")))}°";
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

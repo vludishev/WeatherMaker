@@ -1,5 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Win32;
+using System.Globalization;
+using System.Reflection;
 using System.Windows;
+using WPFLocalizeExtension.Engine;
 
 namespace WeatherMaker
 {
@@ -12,16 +16,20 @@ namespace WeatherMaker
         {
             base.OnStartup(e);
 
-            // Создаем ConfigurationBuilder и загружаем конфигурацию из файла
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
+            CultureInfo cultureInfo = new CultureInfo("en-US");
 
-            // Добавляем конфигурацию в ресурсы приложения
-            Current.Resources.Add("Configuration", configuration);
+            if (AppSettings.Language == "Русский")
+            {
+                cultureInfo = new CultureInfo("ru"); // для русского языка
+            }
+            else if (AppSettings.Language == "English")
+            {
+                cultureInfo = new CultureInfo("en-US");
+            }
 
-            // Здесь можно запустить ваше WPF окно или другие действия...
+            Thread.CurrentThread.CurrentCulture = cultureInfo;
+            Thread.CurrentThread.CurrentUICulture = cultureInfo;
+            LocalizeDictionary.Instance.Culture = cultureInfo;
         }
     }
 }
