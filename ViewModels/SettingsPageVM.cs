@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using WeatherMaker.Models;
 using WeatherMaker.Models.Responses;
@@ -6,7 +7,7 @@ using WeatherMaker.Services;
 
 namespace WeatherMaker.ViewModels
 {
-    public class SettingsVM
+    public class SettingsPageVM
     {
         public bool Autorun { get; set; }
         public List<GeoInfo> Cities { get; set; }
@@ -44,14 +45,19 @@ namespace WeatherMaker.ViewModels
 
         private IWeatherService WeatherService { get; set; }
 
-        public SettingsVM()
+        public SettingsPageVM()
         {
             WeatherService = new WeatherService();
 
-            //LocalizedLogic.Instance["Celsius"], LocalizedLogic.Instance["Kelvin"], LocalizedLogic.Instance["Fahrenheit"]
+            Initialization();
+        }
+
+        public void Initialization()
+        {
             Autorun = bool.Parse(AppSettings.Autorun ?? "false");
-            Cities = WeatherService.GetAllCityNames<GeolocationResponse>().Result.Geonames;
-            SelectedCity = new GeoInfo() {
+            Cities = AppSettings.GetCities();   
+            SelectedCity = new GeoInfo()
+            {
                 Name = WeatherService.GetCityName(AppSettings.GeonameId, CultureInfo.CurrentCulture.TwoLetterISOLanguageName).Result,
                 Latitude = AppSettings.Latitude,
                 Longitude = AppSettings.Longitude,
@@ -60,7 +66,6 @@ namespace WeatherMaker.ViewModels
             var tempEnum = Enum.Parse<TemperatureUnit>(AppSettings.TemperatureUnit);
             SelectedTempUnit = new TemperatureUnitInfo() { Value = tempEnum, LocalizedValue = LocalizedLogic.Instance[tempEnum.ToString()] };
             SelectedLanguage = new LanguageModel() { Value = AppSettings.Language, LocalizedValue = LocalizedLogic.Instance[AppSettings.Language] };
-            Test = "HEY";
         }
     }
 }

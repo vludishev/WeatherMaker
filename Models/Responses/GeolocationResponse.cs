@@ -9,13 +9,13 @@ namespace WeatherMaker.Models.Responses
 
     public class GeoInfo
     {
-        [JsonPropertyName("Lng")]
+        [JsonPropertyName("Lat")]
         public string? Latitude { get; set; }
         [JsonPropertyName("GeonameId")]
         public int GeonameId { get; set; }
         [JsonPropertyName("Name")]
         public string Name { get; set; }
-        [JsonPropertyName("Lat")]
+        [JsonPropertyName("Lng")]
         public string? Longitude { get; set; }
     }
 }

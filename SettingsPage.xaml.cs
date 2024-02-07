@@ -29,11 +29,11 @@ namespace WeatherMaker
     public partial class SettingsPage : Page
     {
 
-        public SettingsPage()
+        public SettingsPage(SettingsPageVM settingsPageVm)
         {
             InitializeComponent();
 
-            DataContext = new SettingsVM();
+            DataContext = settingsPageVm ?? new SettingsPageVM();
 
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
 

@@ -9,7 +9,7 @@ using WeatherMaker.Services;
 
 namespace WeatherMaker.ViewModels
 {
-    public class MainVM : INotifyPropertyChanged
+    public class MainPageVM : INotifyPropertyChanged
     {
         public ObservableCollection<DowTile> DowTiles { get; } = [];
 
@@ -19,8 +19,11 @@ namespace WeatherMaker.ViewModels
         public string PrecipitationType { get; set; }
         public string Coordinates { get; set; }
 
-        private TemperatureUnit _temperatureUnit {  get; set; }
-        private IWeatherService _weatherService { get; set; }
+        private TemperatureUnit TemperatureUnit {  get; set; }
+        private IWeatherService WeatherService { get; set; }
+
+        private readonly string latitude;
+        private readonly string longitude;
 
         private RelayCommand dailyModeCommand;
         private RelayCommand hourlyModeCommand;
@@ -41,10 +44,14 @@ namespace WeatherMaker.ViewModels
             }
         }
 
-        public MainVM()
+        public MainPageVM()
         {
-            _weatherService = new WeatherService();
-            GetCurrentWeatherData();
+            WeatherService = new WeatherService();
+
+            latitude = AppSettings.Latitude;
+            longitude = AppSettings.Longitude;
+
+            SetCurrentWeatherData();
             SetDailyData();
         }
 
@@ -60,16 +67,19 @@ namespace WeatherMaker.ViewModels
             SetHourlyData();
         }
 
-        private void SetHourlyData()
+        public void SetHourlyData()
         {
-            var weatherData = _weatherService.GetWeatherData<HourlyWeatherResponse>
-                (
-                    AppSettings.Latitude,
-                    AppSettings.Longitude
-                ).Result;
+            HourlyWeatherResponse? weatherData = WeatherCache.GetData<HourlyWeatherResponse>(nameof(HourlyWeatherResponse));
+
             if (weatherData == null)
             {
-                return;
+                weatherData = WeatherService.GetWeatherData<HourlyWeatherResponse>
+                  (
+                      latitude,
+                      longitude
+                  ).Result;
+
+                WeatherCache.SetData(nameof(HourlyWeatherResponse), weatherData, DateTimeOffset.UtcNow.AddHours(1));
             }
 
             for (int i = 1; i < weatherData.Hourly.Temperature.Count; i++)
@@ -79,12 +89,12 @@ namespace WeatherMaker.ViewModels
                 DowTile dowTile = new()
                 {
                     VerticalAlignment = VerticalAlignment.Stretch,
-                    Width = 70,
+                    Width = 67,
                     ViewModel = new()
                     {
                         DayOfWeek = AppSettings.Language == "English" ? DateTime.Parse(weatherData.Hourly.Date[i]).ToString("h tt", CultureInfo.InvariantCulture)
                             : DateTime.Parse(weatherData.Hourly.Date[i]).ToString("HH:mm"),
-                        DegreesNumber = $"{Convert.ToInt32(Helper.CalculateTemperature(weatherData.Hourly.Temperature[i], _temperatureUnit))}°",
+                        DegreesNumber = $"{Convert.ToInt32(Helper.CalculateTemperature(weatherData.Hourly.Temperature[i], TemperatureUnit))}°",
                         WeatherPicture = img
                     }
                 };
@@ -92,13 +102,20 @@ namespace WeatherMaker.ViewModels
             }
         }
 
-        private void SetDailyData()
+        public void SetDailyData()
         {
-            var weatherData = _weatherService.GetWeatherData<DailyWeatherResponse>
-                 (
-                     AppSettings.Latitude,
-                     AppSettings.Longitude
-                 ).Result;
+            DailyWeatherResponse? weatherData = WeatherCache.GetData<DailyWeatherResponse>(nameof(DailyWeatherResponse));
+
+            if (weatherData == null)
+            {
+                weatherData = WeatherService.GetWeatherData<DailyWeatherResponse>
+                  (
+                      latitude,
+                      longitude
+                  ).Result;
+
+                WeatherCache.SetData(nameof(DailyWeatherResponse), weatherData, DateTimeOffset.UtcNow.AddHours(1));
+            }
 
             for (int i = 1; i < weatherData.Daily.AverageTemperatures.Count; i++)
             {
@@ -107,11 +124,11 @@ namespace WeatherMaker.ViewModels
                 DowTile dowTile = new()
                 {
                     VerticalAlignment = VerticalAlignment.Stretch,
-                    Width = 70,
+                    Width = 67,
                     ViewModel = new()
                     {
                         DayOfWeek = DateTime.Parse(weatherData.Daily.Date[i]).ToString("ddd", CultureInfo.CurrentCulture),
-                        DegreesNumber = $"{Convert.ToInt32(Helper.CalculateTemperature(weatherData.Daily.AverageTemperatures[i], _temperatureUnit))}°",
+                        DegreesNumber = $"{Convert.ToInt32(Helper.CalculateTemperature(weatherData.Daily.AverageTemperatures[i], TemperatureUnit))}°",
                         WeatherPicture = img
                     }
                 };
@@ -119,32 +136,38 @@ namespace WeatherMaker.ViewModels
             }
         }
 
-        private void GetCurrentWeatherData()
+        public void SetCurrentWeatherData()
         {
             var latitude = AppSettings.Latitude;
             var longitude = AppSettings.Longitude;
             if (Enum.TryParse(AppSettings.TemperatureUnit, out TemperatureUnit temperatureUnit))
             {
-                _temperatureUnit = temperatureUnit;
+                TemperatureUnit = temperatureUnit;
             }
             else
             {
-                _temperatureUnit = TemperatureUnit.Celsius;
+                TemperatureUnit = TemperatureUnit.Celsius;
             }
-            
 
-            var weatherData = _weatherService.GetWeatherData<CurrentWeatherResponse>
+            CurrentWeatherResponse? weatherData = WeatherCache.GetData<CurrentWeatherResponse>(nameof(CurrentWeatherResponse));
+
+            if (weatherData == null)
+            {
+                weatherData = WeatherService.GetWeatherData<CurrentWeatherResponse>
                   (
                       latitude,
                       longitude
                   ).Result;
 
+                WeatherCache.SetData(nameof(CurrentWeatherResponse), weatherData, DateTimeOffset.UtcNow.AddHours(1));
+            }
+
             var weatherDescription = WeatherCodeDescriptions.GetDescription((WeatherCode)weatherData.Current.WeatherCode);
 
-            CurrentTemperature = $"{Convert.ToInt32(Helper.CalculateTemperature(weatherData.Current.Temperature, _temperatureUnit))}°";
+            CurrentTemperature = $"{Convert.ToInt32(Helper.CalculateTemperature(weatherData.Current.Temperature, TemperatureUnit))}°";
             WeatherImage = weatherDescription.WeatherImg;
             PrecipitationType = weatherDescription.Description;
-            CurrentCity = _weatherService.GetCityName(AppSettings.GeonameId, CultureInfo.CurrentCulture.TwoLetterISOLanguageName).Result;
+            CurrentCity = WeatherService.GetCityName(AppSettings.GeonameId, CultureInfo.CurrentCulture.TwoLetterISOLanguageName).Result;
             Coordinates = $"{LocalizedLogic.Instance["LatitudeTB"]}:{Convert.ToInt32(double.Parse(latitude, CultureInfo.GetCultureInfo("en")))}° " +
                 $"{LocalizedLogic.Instance["LongitudeTB"]}:{Convert.ToInt32(double.Parse(longitude, CultureInfo.GetCultureInfo("en")))}°";
         }

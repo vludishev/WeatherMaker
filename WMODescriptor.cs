@@ -32,13 +32,14 @@ namespace WeatherMaker
         SnowShowersHeavy = 86,
         ThunderstormSlight = 95,
         ThunderstormWithSlightHail = 96,
-        ThunderstormWithHeavyHail = 99
+        ThunderstormWithHeavyHail = 99,
+        Default = 100
     }
 
     public class WeatherCodeModel
     {
         public string Description { get; set; }
-        public ImageSource WeatherImg { get; set; }
+        public ImageSource? WeatherImg { get; set; }
     }
 
     public static class WeatherCodeDescriptions

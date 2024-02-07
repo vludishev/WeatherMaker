@@ -37,7 +37,7 @@
 
         <Style x:Key="CustomImageStyle" TargetType="Image">
             <Setter Property="Margin" Value="5 0" />
-            <Setter Property="Width" Value="30" />
+            <Setter Property="Width" Value="20" />
         </Style>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -365,6 +365,11 @@
                       IsTextSearchEnabled="True" StaysOpenOnEdit="True" SelectionChanged="GeopositionCB_SelectionChanged" Text="{Binding SelectedCity.Name}"
                       DisplayMemberPath="Name">
                 <!-- Добавьте свои варианты сюда -->
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
             </ComboBox>
 
             <Line Margin="0 20 0 15" Stroke="White" X1="0" X2="400" StrokeThickness="3" Grid.Row="5"/>
