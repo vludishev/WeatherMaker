@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using WeatherMaker.Models;
 using WeatherMaker.Models.Responses;
 using WeatherMaker.Services;
@@ -12,60 +10,51 @@ namespace WeatherMaker.ViewModels
         public bool Autorun { get; set; }
         public List<GeoInfo> Cities { get; set; }
         public GeoInfo SelectedCity { get; set; }
-
-        public List<TemperatureUnitInfo> TemperatureUnits { get; set; } =
-        [
-            new()
-            {
-                Value = TemperatureUnit.Celsius,
-                LocalizedValue = LocalizedLogic.Instance[TemperatureUnit.Celsius.ToString()]
-            },
-            new()
-            {
-                Value = TemperatureUnit.Kelvin,
-                LocalizedValue = LocalizedLogic.Instance[TemperatureUnit.Kelvin.ToString()]
-            },
-            new()
-            {
-                Value = TemperatureUnit.Fahrenheit,
-                LocalizedValue = LocalizedLogic.Instance[TemperatureUnit.Fahrenheit.ToString()]
-            },
-        ];
-
+        public List<TemperatureUnitInfo> TemperatureUnits { get; set; }
         public TemperatureUnitInfo SelectedTempUnit { get; set; }
-
-        public List<LanguageModel> Languages { get; set; } =
-        [
-            new() { Value = Language.Russian, LocalizedValue = LocalizedLogic.Instance[Language.Russian] },
-            new() { Value = Language.English, LocalizedValue = LocalizedLogic.Instance[Language.English] }
-        ];   
-
+        public List<LanguageModel> Languages { get; set; }
         public LanguageModel SelectedLanguage { get; set; }
         public string Test { get; set; }
 
-        private IWeatherService WeatherService { get; set; }
+        private readonly IWeatherService WeatherService;
 
         public SettingsPageVM()
         {
             WeatherService = new WeatherService();
-
             Initialization();
         }
 
-        public void Initialization()
+        private void Initialization()
         {
-            Autorun = bool.Parse(AppSettings.Autorun ?? "false");
-            Cities = AppSettings.GetCities();   
-            SelectedCity = new GeoInfo()
+            Autorun = bool.TryParse(AppSettings.Autorun, out bool autorun) && autorun;
+            Cities = AppSettings.GetCities();
+            SelectedCity = new GeoInfo
             {
-                Name = WeatherService.GetCityName(AppSettings.GeonameId, CultureInfo.CurrentCulture.TwoLetterISOLanguageName).Result,
+                Name = AppSettings.SelectedCity,
                 Latitude = AppSettings.Latitude,
                 Longitude = AppSettings.Longitude,
             };
 
-            var tempEnum = Enum.Parse<TemperatureUnit>(AppSettings.TemperatureUnit);
-            SelectedTempUnit = new TemperatureUnitInfo() { Value = tempEnum, LocalizedValue = LocalizedLogic.Instance[tempEnum.ToString()] };
-            SelectedLanguage = new LanguageModel() { Value = AppSettings.Language, LocalizedValue = LocalizedLogic.Instance[AppSettings.Language] };
+            TemperatureUnits = new List<TemperatureUnitInfo>
+            {
+                new TemperatureUnitInfo { Value = TemperatureUnit.Celsius, LocalizedValue = GetLocalizedTemperatureUnit(TemperatureUnit.Celsius) },
+                new TemperatureUnitInfo { Value = TemperatureUnit.Kelvin, LocalizedValue = GetLocalizedTemperatureUnit(TemperatureUnit.Kelvin) },
+                new TemperatureUnitInfo { Value = TemperatureUnit.Fahrenheit, LocalizedValue = GetLocalizedTemperatureUnit(TemperatureUnit.Fahrenheit) }
+            };
+
+            SelectedTempUnit = TemperatureUnits.Find(unit => unit.Value.ToString() == AppSettings.TemperatureUnit);
+
+            Languages = new List<LanguageModel>
+            {
+                new LanguageModel { Value = Language.Russian, LocalizedValue = GetLocalizedLanguage(Language.Russian) },
+                new LanguageModel { Value = Language.English, LocalizedValue = GetLocalizedLanguage(Language.English) }
+            };
+
+            SelectedLanguage = Languages.Find(lang => lang.Value.ToString() == AppSettings.Language);
         }
+
+        private string GetLocalizedTemperatureUnit(TemperatureUnit unit) => LocalizedLogic.Instance[unit.ToString()];
+
+        private string GetLocalizedLanguage(string lang) => LocalizedLogic.Instance[lang];
     }
 }

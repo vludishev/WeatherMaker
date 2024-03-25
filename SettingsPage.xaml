@@ -330,7 +330,7 @@
         
         <!--Header-->
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Image x:Name="ReturnImg" Width="20" MouseLeftButtonDown="ReturnButton_Click" Style="{StaticResource CustomImageStyle}"></Image>
+            <Image x:Name="ReturnImg" Source="resources\images\Return.png" Width="20" MouseLeftButtonDown="ReturnButton_Click" Style="{StaticResource CustomImageStyle}"></Image>
             <TextBlock x:Name="SettingsTB" Margin="10 0 0 0" FontSize="20" Text="{lex:Loc}" Style="{StaticResource CustomTextBlockStyle}" />
         </StackPanel>
         

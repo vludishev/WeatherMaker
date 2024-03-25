@@ -16,20 +16,13 @@ namespace WeatherMaker
     {
         private readonly Brush myBlue = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#251A54"));
 
-        SettingsPageVM settingsPageVM = new SettingsPageVM();
+        readonly SettingsPageVM settingsPageVM = new SettingsPageVM();
 
         public MainPage()
         {
             InitializeComponent();
 
             DataContext = new MainPageVM();
-
-            string basePath = AppDomain.CurrentDomain.BaseDirectory;
-
-            OptionsImg.Source = new BitmapImage(new Uri(Path.Combine(basePath, @"resources\images\Settings.png")));
-            GeoImg.Source = new BitmapImage(new Uri(Path.Combine(basePath, @"resources\images\Location.png")));
-            MinimizeWindowImg.Source = new BitmapImage(new Uri(Path.Combine(basePath, @"resources\images\MinimizeWindow.png")));
-            CloseWindowImg.Source = new BitmapImage(new Uri(Path.Combine(basePath, @"resources\images\CloseWIndow.png")));
         }
 
         private void HourlyModeBtn_Click(object sender, RoutedEventArgs e)

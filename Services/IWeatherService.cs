@@ -1,6 +1,4 @@
-﻿using WeatherMaker.Models;
-
-namespace WeatherMaker.Services
+﻿namespace WeatherMaker.Services
 {
     public interface IWeatherService
     {

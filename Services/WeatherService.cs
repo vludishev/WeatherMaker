@@ -1,38 +1,29 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Data.SqlTypes;
+﻿using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Json;
-using WeatherMaker.Models.Responses;
-using XPlat.Device.Geolocation;
-using static System.Net.WebRequestMethods;
-using System.Xml;
 using System.Xml.Linq;
-using System.Globalization;
+using WeatherMaker.Models.Responses;
 
 namespace WeatherMaker.Services
 {
     class WeatherService : IWeatherService
     {
+        private readonly HttpClient _httpClient;
+
+        public WeatherService()
+        {
+            _httpClient = new HttpClient();
+        }
+
         public async Task<T?> GetWeatherData<T>(string lat, string lng)
         {
-            string apiUrl = string.Empty;
-            if (typeof(T) == typeof(CurrentWeatherResponse))
+            string apiUrl = typeof(T) switch
             {
-                apiUrl = $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lng}&current=temperature_2m,weather_code&forecast_days=1";
-            }
-            else if (typeof(T) == typeof(DailyWeatherResponse))
-            {
-                apiUrl = $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lng}&daily=weather_code,temperature_2m_max,temperature_2m_min";
-            }
-            else if (typeof(T) == typeof(HourlyWeatherResponse))
-            {
-                apiUrl = $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lng}&hourly=temperature_2m,weather_code&forecast_days=1";
-            }
-            else
-            {
-                throw new ArgumentException("Unsupported type", nameof(T));
-            }
+                Type t when t == typeof(CurrentWeatherResponse) => $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lng}&current=temperature_2m,weather_code&forecast_days=1",
+                Type t when t == typeof(DailyWeatherResponse) => $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lng}&daily=weather_code,temperature_2m_max,temperature_2m_min",
+                Type t when t == typeof(HourlyWeatherResponse) => $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lng}&hourly=temperature_2m,weather_code&forecast_days=1",
+                _ => throw new ArgumentException("Unsupported type", nameof(T))
+            };
 
             return await GetAsync<T>(apiUrl).ConfigureAwait(false);
         }
@@ -55,28 +46,21 @@ namespace WeatherMaker.Services
                     && a.Attribute("isPreferredName")?.Value == "true")
                 .Select(a => a.Value);
 
-            if (alternateNames.Any())
-                return alternateNames.First();
-
-            return doc.Element("geoname")?.Element("name")?.Value ?? "Unknown";
+            return alternateNames.FirstOrDefault() ?? doc.Element("geoname")?.Element("name")?.Value ?? "Unknown";
         }
 
-        private static async Task<T?> GetAsync<T>(string url)
+        private async Task<T?> GetAsync<T>(string url)
         {
-            using HttpClient client = new();
-            var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+            var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
-            var responseObject = await response.Content.ReadFromJsonAsync<T>();
-            return responseObject;
+            return await response.Content.ReadFromJsonAsync<T>().ConfigureAwait(false);
         }
 
-        public static async Task<string> GetAsyncXml(string url)
+        private async Task<string> GetAsyncXml(string url)
         {
-            using HttpClient client = new();
-            var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+            var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
-            var responseObject = await response.Content.ReadAsStringAsync();
-            return responseObject;
+            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         }
     }
 }

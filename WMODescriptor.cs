@@ -46,10 +46,7 @@ namespace WeatherMaker
     {
         public static ImageSource GetWeatherImg(string fileName)
         {
-            // Инициализация изображения
-            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string relativePath = System.IO.Path.Combine(baseDirectory, $"Resources/Images/{fileName}");
-            return new BitmapImage(new Uri(relativePath, UriKind.RelativeOrAbsolute));
+            return new BitmapImage(new Uri($"pack://application:,,,/WeatherMaker;component/resources/images/{fileName}"));
         }
 
         public static WeatherCodeModel GetDescription(WeatherCode code)

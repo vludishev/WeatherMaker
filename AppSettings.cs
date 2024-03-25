@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
+﻿using System.Configuration;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using WeatherMaker.Models.Responses;
 using WeatherMaker.Services;
@@ -20,15 +20,9 @@ namespace WeatherMaker
 
     public static class AppSettings
     {
-        private static Configuration GetConfiguration()
-        {
-            return ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-        }
+        private static Configuration GetConfiguration() => ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-        private static string GetValue(string key)
-        {
-            return ConfigurationManager.AppSettings[key];
-        }
+        private static string GetValue(string key) => ConfigurationManager.AppSettings[key];
 
         private static void SetValue(string key, string value)
         {
@@ -47,10 +41,10 @@ namespace WeatherMaker
             ConfigurationManager.RefreshSection("appSettings");
         }
 
-        public static string GeonameId
+        public static string SelectedCity
         {
-            get { return GetValue("GeonameId"); }
-            set { SetValue("GeonameId", value); }
+            get { return GetValue("SelectedCity"); }
+            set { SetValue("SelectedCity", value); }
         }
 
         public static string Latitude
@@ -59,39 +53,33 @@ namespace WeatherMaker
             set { SetValue("Latitude", value); }
         }
 
-        public static void SetDataCitiesSection(string jsonData)
+        public static void SetDataCitiesSection(IEnumerable<GeoInfo> cities)
         {
             var config = GetConfiguration();
+            CustomSection customSection = config.GetSection("сitiesSection") as CustomSection ?? new CustomSection();
+            customSection.CitiesJson = JsonSerializer.Serialize(cities);
 
-            // Получаем пользовательскую секцию, проверяя, существует ли она
-            CustomSection customSection = config.GetSection("сitiesSection") as CustomSection;
+            // Удаляем существующую секцию, если она есть, перед добавлением новой
+            if (config.Sections["сitiesSection"] != null)
+                config.Sections.Remove("сitiesSection");
 
-            // Если секции не существует, создаем новую
-            customSection = new CustomSection();
-            //customSection.CitiesJson = JsonSerializer.Serialize(new WeatherService().GetAllCityNames<GeolocationResponse>().Result.Geonames);
             config.Sections.Add("сitiesSection", customSection);
-
-            // Сохраняем изменения в конфигурационном файле
             config.Save(ConfigurationSaveMode.Modified);
         }
 
         public static List<GeoInfo> GetCities()
         {
             var config = GetConfiguration();
+            CustomSection citiesSection = config.GetSection("сitiesSection") as CustomSection;
+            string citiesJson = citiesSection?.CitiesJson;
 
-            CustomSection сitiesSection = config.GetSection("сitiesSection") as CustomSection;
-
-            if (string.IsNullOrEmpty(сitiesSection?.CitiesJson))
+            if (string.IsNullOrEmpty(citiesJson))
             {
-                var customSection = new CustomSection();
-                config.Sections.Add("сitiesSection", customSection);
-                var cities = new WeatherService().GetAllCityNames<GeolocationResponse>().Result.Geonames;
-                customSection.CitiesJson = JsonSerializer.Serialize(cities);
-                config.Save(ConfigurationSaveMode.Modified);
+                var cities = new WeatherService().GetAllCityNames<GeolocationResponse>().Result.Geonames.ToList();
+                SetDataCitiesSection(cities);
                 return cities;
             }
 
-            string citiesJson = сitiesSection.CitiesJson;
             return JsonSerializer.Deserialize<List<GeoInfo>>(citiesJson);
         }
 

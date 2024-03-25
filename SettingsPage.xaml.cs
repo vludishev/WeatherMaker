@@ -35,9 +35,6 @@ namespace WeatherMaker
 
             DataContext = settingsPageVm ?? new SettingsPageVM();
 
-            string basePath = AppDomain.CurrentDomain.BaseDirectory;
-
-            ReturnImg.Source = new BitmapImage(new Uri(Path.Combine(basePath, @"resources\images\Return.png")));
             LanguageCB.FontSize = 15;
             TemperatureUnitCB.FontSize = 15;
             GeopositionCB.FontSize = 15;
@@ -49,7 +46,10 @@ namespace WeatherMaker
 
         private void ReturnButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new MainPage());
+            if (NavigationService != null)
+            {
+                NavigationService.Navigate(new MainPage());
+            }
         }
 
         private void GeopositionCB_SelectionChanged(object sender, RoutedEventArgs e)
@@ -66,7 +66,7 @@ namespace WeatherMaker
                 }
 
                 if (selectedItem is GeoInfo geoItem) {
-                    AppSettings.GeonameId = geoItem.GeonameId.ToString();
+                    AppSettings.SelectedCity = geoItem.Name;
                     AppSettings.Latitude = geoItem.Latitude;
                     AppSettings.Longitude = geoItem.Longitude;
                 }
