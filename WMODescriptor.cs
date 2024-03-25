@@ -32,46 +32,55 @@ namespace WeatherMaker
         SnowShowersHeavy = 86,
         ThunderstormSlight = 95,
         ThunderstormWithSlightHail = 96,
-        ThunderstormWithHeavyHail = 99
+        ThunderstormWithHeavyHail = 99,
+        Default = 100
     }
 
     public class WeatherCodeModel
     {
         public string Description { get; set; }
-        public ImageSource WeatherImg { get; set; }
+        public ImageSource? WeatherImg { get; set; }
     }
 
     public static class WeatherCodeDescriptions
     {
         public static ImageSource GetWeatherImg(string fileName)
         {
-            // Инициализация изображения
-            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string relativePath = System.IO.Path.Combine(baseDirectory, $"Resources/Images/{fileName}");
-            return new BitmapImage(new Uri(relativePath, UriKind.RelativeOrAbsolute));
+            return new BitmapImage(new Uri($"pack://application:,,,/WeatherMaker;component/resources/images/{fileName}"));
         }
 
         public static WeatherCodeModel GetDescription(WeatherCode code)
         {
             return code switch
             {
-                WeatherCode.ClearSky => new WeatherCodeModel() { Description = "Clear sky", WeatherImg = GetWeatherImg("ClearSky.png") },
-                WeatherCode.MainlyClear => new WeatherCodeModel() { Description = "Mainly clear", WeatherImg = GetWeatherImg("MainlyClear.png") },
-                WeatherCode.PartlyCloudy => new WeatherCodeModel() { Description = "Partly cloudy", WeatherImg = GetWeatherImg("PartlyCloudy.png") },
-                WeatherCode.Overcast => new WeatherCodeModel() { Description = "Overcast", WeatherImg = GetWeatherImg("Overcast.png") },
-                WeatherCode.Fog => new WeatherCodeModel() { Description = "Fog and depositing rime fog", WeatherImg = GetWeatherImg("Fog.png") },
-                WeatherCode.RimeFog => new WeatherCodeModel() { Description = "Fog and depositing rime fog", WeatherImg = GetWeatherImg("RimeFog.png") },
-                WeatherCode.DrizzleLight or WeatherCode.DrizzleModerate or WeatherCode.DrizzleDense => new WeatherCodeModel() { Description = "Drizzle: Light intensity", WeatherImg = GetWeatherImg("DrizzleLight.png") },
-                WeatherCode.FreezingDrizzleLight or WeatherCode.FreezingDrizzleDense => new WeatherCodeModel() { Description = "Freezing Drizzle: Light intensity", WeatherImg = GetWeatherImg("FreezingDrizzle.png") },
-                WeatherCode.RainSlight => new WeatherCodeModel() { Description = "Rain: Slight intensity", WeatherImg = GetWeatherImg("RainSlight.png") },
-                WeatherCode.RainModerate => new WeatherCodeModel() { Description = "Rain: Moderate intensity", WeatherImg = GetWeatherImg("RainModerate.png") },
-                WeatherCode.RainHeavy => new WeatherCodeModel() { Description = "Rain: Heavy intensity", WeatherImg = GetWeatherImg("RainHeavy.png") },
-                WeatherCode.FreezingRainLight => new WeatherCodeModel() { Description = "Freezing Rain: Light intensity", WeatherImg = GetWeatherImg("FreezingRainLight.png") },
-                WeatherCode.FreezingRainHeavy => new WeatherCodeModel() { Description = "Freezing Rain: Heavy intensity", WeatherImg = GetWeatherImg("FreezingRainHeavy.png") },
-                WeatherCode.SnowFallSlight or WeatherCode.SnowShowersSlight or WeatherCode.RainShowersSlight => new WeatherCodeModel() { Description = "Snow fall: Slight intensity", WeatherImg = GetWeatherImg("SnowSlight.png") },
-                WeatherCode.SnowFallModerate or WeatherCode.RainShowersModerate or WeatherCode.SnowGrains => new WeatherCodeModel() { Description = "Snow fall: Moderate intensity", WeatherImg = GetWeatherImg("SnowModerate.png") },
-                WeatherCode.SnowFallHeavy or WeatherCode.SnowShowersHeavy or WeatherCode.RainShowersViolent => new WeatherCodeModel() { Description = "Snow fall: Heavy intensity", WeatherImg = GetWeatherImg("SnowHeavy.png") },
-                WeatherCode.ThunderstormSlight or WeatherCode.ThunderstormWithSlightHail or WeatherCode.ThunderstormWithHeavyHail => new WeatherCodeModel() { Description = "Thunderstorm: Slight intensity", WeatherImg = GetWeatherImg("Thunderstorm.png") },
+                WeatherCode.ClearSky => new WeatherCodeModel() { Description = LocalizedLogic.Instance["ClearSky"], WeatherImg = GetWeatherImg("ClearSky.png") },
+                WeatherCode.MainlyClear => new WeatherCodeModel() { Description = LocalizedLogic.Instance["MainlyClear"], WeatherImg = GetWeatherImg("MainlyClear.png") },
+                WeatherCode.PartlyCloudy => new WeatherCodeModel() { Description = LocalizedLogic.Instance["PartlyCloudy"], WeatherImg = GetWeatherImg("PartlyCloudy.png") },
+                WeatherCode.Overcast => new WeatherCodeModel() { Description = LocalizedLogic.Instance["Overcast"], WeatherImg = GetWeatherImg("Overcast.png") },
+                WeatherCode.Fog => new WeatherCodeModel() { Description = LocalizedLogic.Instance["Fog"], WeatherImg = GetWeatherImg("Fog.png") },
+                WeatherCode.RimeFog => new WeatherCodeModel() { Description = LocalizedLogic.Instance["RimeFog"], WeatherImg = GetWeatherImg("RimeFog.png") },
+                WeatherCode.DrizzleLight => new WeatherCodeModel() { Description = LocalizedLogic.Instance["DrizzleLight"], WeatherImg = GetWeatherImg("DrizzleLight.png") },
+                WeatherCode.DrizzleModerate => new WeatherCodeModel() { Description = LocalizedLogic.Instance["DrizzleModerate"], WeatherImg = GetWeatherImg("DrizzleLight.png") },
+                WeatherCode.DrizzleDense => new WeatherCodeModel() { Description = LocalizedLogic.Instance["DrizzleDense"], WeatherImg = GetWeatherImg("DrizzleLight.png") },
+                WeatherCode.FreezingDrizzleLight => new WeatherCodeModel() { Description = LocalizedLogic.Instance["FreezingDrizzleLight"], WeatherImg = GetWeatherImg("FreezingDrizzle.png") },
+                WeatherCode.FreezingDrizzleDense => new WeatherCodeModel() { Description = LocalizedLogic.Instance["FreezingDrizzleDense"], WeatherImg = GetWeatherImg("FreezingDrizzle.png") },
+                WeatherCode.RainSlight => new WeatherCodeModel() { Description = LocalizedLogic.Instance["RainSlight"], WeatherImg = GetWeatherImg("RainSlight.png") },
+                WeatherCode.RainModerate => new WeatherCodeModel() { Description = LocalizedLogic.Instance["RainModerate"], WeatherImg = GetWeatherImg("RainModerate.png") },
+                WeatherCode.RainHeavy => new WeatherCodeModel() { Description = LocalizedLogic.Instance["RainHeavy"], WeatherImg = GetWeatherImg("RainHeavy.png") },
+                WeatherCode.FreezingRainLight => new WeatherCodeModel() { Description = LocalizedLogic.Instance["FreezingRainLight"], WeatherImg = GetWeatherImg("FreezingRainLight.png") },
+                WeatherCode.FreezingRainHeavy => new WeatherCodeModel() { Description = LocalizedLogic.Instance["FreezingRainHeavy"], WeatherImg = GetWeatherImg("FreezingRainHeavy.png") },
+                WeatherCode.SnowFallSlight => new WeatherCodeModel() { Description = LocalizedLogic.Instance["SnowFallSlight"], WeatherImg = GetWeatherImg("FreezingRainHeavy.png") },
+                WeatherCode.SnowShowersSlight => new WeatherCodeModel() { Description = LocalizedLogic.Instance["SnowShowersSlight"], WeatherImg = GetWeatherImg("FreezingRainHeavy.png") },
+                WeatherCode.RainShowersSlight => new WeatherCodeModel() { Description = LocalizedLogic.Instance["RainShowersSlight"], WeatherImg = GetWeatherImg("SnowSlight.png") },
+                WeatherCode.SnowFallModerate => new WeatherCodeModel() { Description = LocalizedLogic.Instance["SnowFallModerate"], WeatherImg = GetWeatherImg("SnowSlight.png") },
+                WeatherCode.RainShowersModerate => new WeatherCodeModel() { Description = LocalizedLogic.Instance["RainShowersModerate"], WeatherImg = GetWeatherImg("SnowSlight.png") },
+                WeatherCode.SnowGrains => new WeatherCodeModel() { Description = LocalizedLogic.Instance["SnowGrains"], WeatherImg = GetWeatherImg("SnowModerate.png") },
+                WeatherCode.SnowFallHeavy => new WeatherCodeModel() { Description = LocalizedLogic.Instance["SnowFallHeavy"], WeatherImg = GetWeatherImg("SnowModerate.png") },
+                WeatherCode.SnowShowersHeavy => new WeatherCodeModel() { Description = LocalizedLogic.Instance["SnowShowersHeavy"], WeatherImg = GetWeatherImg("SnowModerate.png") },
+                WeatherCode.RainShowersViolent => new WeatherCodeModel() { Description = LocalizedLogic.Instance["RainShowersViolent"], WeatherImg = GetWeatherImg("SnowHeavy.png") },
+                WeatherCode.ThunderstormSlight => new WeatherCodeModel() { Description = LocalizedLogic.Instance["ThunderstormSlight"], WeatherImg = GetWeatherImg("SnowHeavy.png") },
+                WeatherCode.ThunderstormWithSlightHail => new WeatherCodeModel() { Description = LocalizedLogic.Instance["ThunderstormWithSlightHail"], WeatherImg = GetWeatherImg("SnowHeavy.png") },
+                WeatherCode.ThunderstormWithHeavyHail => new WeatherCodeModel() { Description = LocalizedLogic.Instance["ThunderstormWithHeavyHail"], WeatherImg = GetWeatherImg("Thunderstorm.png") },
                 _ => new WeatherCodeModel() { Description = "Unknown Weather Code", WeatherImg = null },
             };
         }
